@@ -51,20 +51,35 @@ const GetCategoriesList = async () => {
 };
 
 const CreateProduct = async () => {
-  try {
-    if (route.params.id > 0) {
-      const res = await ProductsService.Update(items.value, route.params.id);
-      ToastSuccess({ msg: "Ma'lumot yangilandi !" });
-    } else if (route.params.id == "add") {
-      const res = await ProductsService.Add(items.value);
-      console.log(items.value);
-      ToastSuccess({ msg: "Ma'lumot qo'shildi !" });
-      setTimeout(() => {
-        router.push("/explore");
-      }, 2000);
+  if (
+    items.value.brand &&
+    items.value.title &&
+    items.value.category &&
+    items.value.price &&
+    items.value.discountPercentage &&
+    items.value.rating &&
+    items.value.stock &&
+    items.value.thumbnail &&
+    items.value.images &&
+    items.value.description
+  ) {
+    try {
+      if (route.params.id > 0) {
+        const res = await ProductsService.Update(items.value, route.params.id);
+        ToastSuccess({ msg: "Ma'lumot yangilandi !" });
+      } else if (route.params.id == "add") {
+        const res = await ProductsService.Add(items.value);
+        console.log(items.value);
+        ToastSuccess({ msg: "Ma'lumot qo'shildi !" });
+        setTimeout(() => {
+          router.push("/explore");
+        }, 2000);
+      }
+    } catch (err) {
+      return ToastError({ msg: err.message });
     }
-  } catch (err) {
-    ToastError({ msg: err.message });
+  } else {
+    return ToastError({ msg: "Fill all fields!" });
   }
 };
 
@@ -159,6 +174,7 @@ const labelPosition = ref("top");
               </label>
               <el-form-item>
                 <el-input
+                  type="number"
                   v-model="items.price"
                   clearable
                   placeholder="999.... $"
@@ -176,6 +192,7 @@ const labelPosition = ref("top");
                 <el-input
                   v-model="items.discountPercentage"
                   clearable
+                  type="number"
                   placeholder="9.99...%"
                 />
               </el-form-item>
@@ -188,8 +205,8 @@ const labelPosition = ref("top");
               </label>
               <el-form-item>
                 <el-input
+                  type="number"
                   v-model="items.rating"
-                  type=""
                   clearable
                   placeholder="4.99..."
                 />
@@ -203,6 +220,9 @@ const labelPosition = ref("top");
               </label>
               <el-form-item>
                 <el-input
+                  :min="1"
+                  :max="100"
+                  type="number"
                   v-model="items.stock"
                   clearable
                   placeholder="99.9...%"

@@ -24,8 +24,9 @@ const loading = computed(() => {
 });
 const user = JSON.parse(localStorage.getItem("UserInfo"));
 const token = JSON.parse(localStorage.getItem("AccessToken"));
-console.log(user.id);
+const rateValue = ref("");
 const comment = ref({
+  rateValue: "",
   body: "",
   postId: Number(route.params.id),
   userId: user.id,
@@ -34,6 +35,7 @@ async function AddComment() {
   try {
     const res = await CommentsService.Add(comment.value);
     comment.value.body = "";
+    comment.value.rateValue = "";
     ToastSuccess({ msg: "Comment added !" });
   } catch (err) {
     ToastError({ msg: err.message });
@@ -345,18 +347,26 @@ onMounted(() => {
             </h2>
           </div>
           <form class="mb-6" @submit.prevent="">
-            <div
-              class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700"
-            >
-              <label for="comment" class="sr-only">Your comment</label>
-              <textarea
-                v-model="comment.body"
-                id="comment"
-                rows="4"
-                class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
-                placeholder="Write a comment..."
-                required
-              ></textarea>
+            <div class="md:grid md:grid-cols-4 gap-4 sm:flex sm:flex-wrap">
+              <div
+                class="col-span-3 py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+              >
+                <label for="comment" class="sr-only">Your comment</label>
+                <textarea
+                  v-model="comment.body"
+                  id="comment"
+                  rows="2"
+                  class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+                  placeholder="Write a comment..."
+                  required
+                ></textarea>
+              </div>
+              <div
+                class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+              >
+                <label for="comment" class="sr-only">Your comment</label>
+                <el-rate v-model="comment.rateValue" allow-half />
+              </div>
             </div>
             <button
               @click="AddComment"

@@ -819,37 +819,39 @@ onMounted(async () => {
           </el-table-column>
         </el-table>
         <!-- //// -->
-        <div class="pagenation text-[12px] pt-4 text-center grid grid-cols-2">
-          <div class="w-[30%] m-auto p-4">
-            <el-pagination
-              type="success"
-              small
-              background
-              layout="prev, pager, next"
-              :total="total"
-              class="text-center text-green-600"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-            />
-          </div>
-          <div v-show="items">
-            <el-select
-              @change="onChange(value)"
-              v-model="value"
-              class="p-2 w-[18%]"
-              placeholder="100"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </div>
-        </div>
 
         <!-- // end -->
+      </div>
+    </div>
+    <div
+      class="pagenation text-[12px] mt-4 py-4 text-center bg-white p-4 shadow hover:shadow-xl md:grid md:grid-cols-2 sm:flex sm:flex-wrap"
+    >
+      <div class="md:w-[30%] sm:w-[100%] m-auto">
+        <el-pagination
+          type="success"
+          small
+          background
+          layout="prev, pager, next"
+          :total="total"
+          class="text-center text-green-600"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
+      <div v-show="items" class="">
+        <el-select
+          @change="onChange(value)"
+          v-model="value"
+          class="p-2 w-[18%] m-auto"
+          placeholder="100"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </div>
     </div>
   </div>
